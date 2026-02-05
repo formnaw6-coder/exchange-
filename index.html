@@ -3,15 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بۆرسەی قوشتەپە | Qushtapa Exchange</title>
+    <title>بۆرسەی قوشتەپە - وەشانی کۆتایی</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary-color: #10b981; --app-font: 'Noto Sans Arabic'; }
-        body { font-family: var(--app-font), sans-serif; transition: background-color 0.3s ease; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans Arabic', sans-serif; background-color: #f8fafc; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+<body>
     <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Data & Constants ---
+        const INITIAL_PRICES = [
+            { id: 1, name: "١٠٠ دۆلاری ئەمریکی", buy: "١٥٢,٧٥٠", sell: "١٥٣,٢٥٠", trend: "up", type: "currency" },
+            { id: 2, name: "١٠٠ یۆرۆ", buy: "١٦٥,٠٠٠", sell: "١٦٦,٥٠٠", trend: "stable", type: "currency" },
+            { id: 3, name: "ئاڵتونی عەیار ٢١", buy: "٥٤٠,٠٠٠", sell: "٥٤٨,٠٠٠", trend: "down", type: "metal" }
+        ];
+
+        // --- Components ---
+        const PriceCard = ({ item }) => (
+            <div className="bg-white p-4 rounded-xl shadow-sm border-r-4 border-blue-600 mb-4">
+                <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-gray-700">{item.name}</span>
+                    <i className={`fas ${item.trend === 'up' ? 'fa-arrow-trend-up text-green-500' : 'fa-arrow-trend-down text-red-500'}`}></i>
+                </div>
+                <div className="flex justify-between">
+                    <div><p className="text-xs text-gray-400">کڕین</p><p className="font-bold">{item.buy}</p></div>
+                    <div className="text-left"><p className="text-xs text-gray-400">فرۆشتن</p><p className="font-bold text-blue-600">{item.sell}</p></div>
+                </div>
+            </div>
+        );
+
+        const App = () => {
+            const [view, setView] = useState('market'); // market, converter, admin
+            const [prices, setPrices] = useState(INITIAL_PRICES);
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    {/* Header */}
+                    <header className="bg-blue-700 text-white p-4 shadow-md text-center">
+                        <h1 className="text-xl font-bold">بۆرسەی قوشتەپە</h1>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="flex-1 p-4 pb-20">
+                        {view === 'market' && (
+                            <div className="max-w-md mx-auto">
+                                <h2 className="text-lg font-bold mb-4 text-gray-800"><i className="fas fa-chart-line ml-2"></i>نرخەکانی ئێستا</h2>
+                                {prices.map(p => <PriceCard key={p.id} item={p} />)}
+                            </div>
+                        )}
+
+                        {view === 'converter' && (
+                            <div className="max-w-md mx-auto bg-white p-6 rounded-xl shadow-sm">
+                                <h2 className="text-lg font-bold mb-4">گۆڕینەوەی دراو</h2>
+                                <input type="number" placeholder="بڕی پارە" className="w-full p-3 border rounded mb-4 text-left" dir="ltr" />
+                                <button className="w-full bg-blue-600 text-white p-3 rounded-lg">ئەژمارکردن</button>
+                            </div>
+                        )}
+
+                        {view === 'admin' && (
+                            <div className="max-w-md mx-auto bg-red-50 p-6 rounded-xl border border-red-200">
+                                <h2 className="text-lg font-bold mb-4 text-red-700">بەشی بەڕێوبەر</h2>
+                                <p className="text-sm">بۆ گۆڕینی نرخەکان، دەبێت سەرەتا بچیتە ژوورەوە.</p>
+                                <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded">چوونە ژوورەوە</button>
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Bottom Navigation */}
+                    <nav className="fixed bottom-0 w-full bg-white border-t flex justify-around p-3 text-gray-500">
+                        <button onClick={() => setView('market')} className={`flex flex-col items-center ${view === 'market' ? 'text-blue-600' : ''}`}>
+                            <i className="fas fa-home"></i><span className="text-xs">بازاڕ</span>
+                        </button>
+                        <button onClick={() => setView('converter')} className={`flex flex-col items-center ${view === 'converter' ? 'text-blue-600' : ''}`}>
+                            <i className="fas fa-calculator"></i><span className="text-xs">گۆڕەر</span>
+                        </button>
+                        <button onClick={() => setView('admin')} className={`flex flex-col items-center ${view === 'admin' ? 'text-blue-600' : ''}`}>
+                            <i className="fas fa-user-shield"></i><span className="text-xs">ئەدمین</span>
+                        </button>
+                    </nav>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
