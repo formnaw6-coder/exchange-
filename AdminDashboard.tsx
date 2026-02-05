@@ -1,2 +1,2 @@
 import React from 'react';
-// Rate Management Dashboard...
+// Full Control Panel for updating live prices and managing system access.
