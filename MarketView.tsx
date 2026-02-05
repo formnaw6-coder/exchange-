@@ -1,2 +1,2 @@
 import React from 'react';
-// Market UI Components...
+// Renders the main board with scrolling marquee and currency tabs.
