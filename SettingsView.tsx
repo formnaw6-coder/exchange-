@@ -1,2 +1,2 @@
 import React from 'react';
-// App Preferences and Controls...
+// App preferences, dark mode toggle, and developer mode entry point.
