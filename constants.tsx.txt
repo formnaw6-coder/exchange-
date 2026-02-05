@@ -1,0 +1,4 @@
+import { CurrencyRate, MetalRate, AppConfig } from './types.ts';
+export const TRANSLATIONS_INITIAL = { ... };
+export const DEFAULT_CONFIG: AppConfig = { ... };
+export const INITIAL_RATES: CurrencyRate[] = [ ... ];
